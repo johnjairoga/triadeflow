@@ -1,0 +1,25 @@
+{
+  "name": "triadeflow-dashboard",
+  "version": "1.0.0",
+  "description": "Replicable, modular dashboard template for TriadeFlow clients",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
+    "onboard": "pnpm -F @triadeflow/onboarding start"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0",
+    "typescript": "^5.3.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "typescript": "^5.3.0"
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Metric Definition",
+  "description": "Schema for a single metric in the TriadeFlow metrics catalog",
+  "type": "object",
+  "required": ["id", "name", "tier", "unit", "sourceModels", "sql"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique metric identifier (slug format)",
+      "pattern": "^[a-z0-9_-]+$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name in Portuguese"
+    },
+    "tier": {
+      "type": "string",
+      "enum": ["primary", "secondary", "custom"],
+      "description": "Metric tier: primary (universal), secondary (module-dependent), custom (client-specific)"
+    },
+    "funnelStage": {
+      "type": "string",
+      "enum": ["topo", "meio", "fundo", "na"],
+      "description": "Funnel stage this metric belongs to",
+      "default": "na"
+    },
+    "unit": {
+      "type": "string",
+      "enum": ["currency", "percent", "count", "ratio", "duration"],
+      "description": "Unit of measurement"
+    },
+    "moduleDependency": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of modules required for this metric (empty = always available)",
+      "default": []
+    },
+    "sourceModels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "dbt model references this metric depends on"
+    },
+    "sql": {
+      "type": "string",
+      "description": "Aggregation expression body (will be wrapped in filter_safe macro)"
+    },
+    "filterSafety": {
+      "type": "object",
+      "description": "Configuration for filter-safe aggregation (prevents divide-by-zero, partial-filter distortion)",
+      "properties": {
+        "requiresNonzero": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Column names that must be non-zero for safe aggregation"
+        },
+        "safeDefault": {
+          "description": "Default value if safety check fails (null renders as '—')",
+          "default": null
+        }
+      }
+    },
+    "tests": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "dbt generic tests to apply (not_null, accepted_range, etc.)",
+      "default": []
+    },
+    "owner": {
+      "type": "string",
+      "enum": ["agency", "client"],
+      "description": "Who can edit this metric via UI",
+      "default": "agency"
+    },
+    "description": {
+      "type": "string",
+      "description": "Long-form description for documentation"
+    },
+    "generatedFrom": {
+      "type": "string",
+      "description": "For UI-generated metrics: 'config.custom_metrics' indicates this was auto-generated"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when this metric was generated (for UI-generated metrics only)"
+    }
+  },
+  "additionalProperties": false
+}
